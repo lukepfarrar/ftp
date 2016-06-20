@@ -93,6 +93,22 @@ func (ftp *FTP) Mkd(path string) {
 	ftp.Request("MKD " + path)
 }
 
+func (ftp *FTP) Rnfr(path string) {
+	ftp.Request("RNFR " + path)
+}
+
+func (ftp *FTP) Rnto(path string) {
+	ftp.Request("RNTO " + path)
+}
+
+func (ftp *FTP) Rename(fromPath string, toPath string) {
+	ftp.Rnfr(fromPath)
+	if ftp.Code >= 200 && ftp.Code < 300 {
+		return
+	}
+	ftp.Rnto(toPath)
+}
+
 func (ftp *FTP) Size(path string) (size int) {
 	ftp.Request("SIZE " + path)
 	size, _ = strconv.Atoi(ftp.Message)
